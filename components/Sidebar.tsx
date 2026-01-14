@@ -14,9 +14,9 @@ interface FilterChipProps {
 }
 
 const FilterChip: React.FC<FilterChipProps> = ({ label, onRemove }) => (
-  <div className="flex items-center bg-[#e7f3ff] text-[#006097] px-2 py-1 rounded text-xs font-semibold mb-2 mr-2 max-w-full group/chip">
+  <div className="flex items-center bg-[#e7f3ff] text-[#006097] px-2 py-1 rounded text-xs font-semibold mb-2 mr-2 max-w-full group/chip animate-in zoom-in-95 duration-200">
     <span className="truncate">{label}</span>
-    <button onClick={(e) => { e.stopPropagation(); onRemove(); }} className="ml-1 flex-shrink-0 hover:text-[#004182]">
+    <button onClick={(e) => { e.stopPropagation(); onRemove(); }} className="ml-1 flex-shrink-0 hover:text-[#004182] active:scale-75 transition-transform">
       <X size={12} />
     </button>
   </div>
@@ -37,14 +37,16 @@ const FilterSection: React.FC<FilterSectionProps> = ({ title, icon, children, is
       className="flex items-center justify-between py-4 px-4 cursor-pointer hover:bg-gray-50 transition-colors group"
     >
       <div className="flex items-center space-x-3">
-        <span className="text-gray-400 group-hover:text-blue-600 transition-colors">{icon}</span>
+        <span className="text-gray-400 group-hover:text-blue-600 transition-colors transform group-hover:scale-110 duration-200">{icon}</span>
         <h3 className="text-sm font-semibold text-gray-700">{title}</h3>
       </div>
-      <div className="text-gray-400">
-        {isOpen ? <ChevronUp size={16} /> : <ChevronDown size={16} />}
+      <div className={`text-gray-400 transition-transform duration-300 ${isOpen ? 'rotate-180' : ''}`}>
+        <ChevronDown size={16} />
       </div>
     </div>
-    {isOpen && <div className="px-4 pb-4 animate-in fade-in slide-in-from-top-1 duration-200">{children}</div>}
+    <div className={`overflow-hidden transition-all duration-300 ease-in-out ${isOpen ? 'max-h-[500px] opacity-100' : 'max-h-0 opacity-0'}`}>
+      <div className="px-4 pb-4">{children}</div>
+    </div>
   </div>
 );
 
@@ -87,29 +89,26 @@ export const Sidebar: React.FC<SidebarProps> = ({ filters, onUpdateFilters, onAp
   return (
     <>
       {/* Mobile Overlay */}
-      {isOpen && (
-        <div 
-          className="fixed inset-0 bg-black bg-opacity-30 z-[60] lg:hidden" 
-          onClick={onCloseMobile}
-        />
-      )}
+      <div 
+        className={`fixed inset-0 bg-black/40 z-[60] lg:hidden transition-opacity duration-300 ${isOpen ? 'opacity-100 pointer-events-auto' : 'opacity-0 pointer-events-none'}`} 
+        onClick={onCloseMobile}
+      />
 
       <aside className={`
-        fixed lg:sticky top-12 left-0 h-[calc(100vh-48px)] w-72 bg-white border-r flex flex-col z-[70] shadow-xl lg:shadow-none transition-transform duration-300
-        ${isOpen ? 'translate-x-0' : '-translate-x-full'}
-        lg:translate-x-0 ${!isOpen ? 'lg:w-0 lg:overflow-hidden lg:border-none' : 'lg:w-72'}
+        fixed lg:sticky top-12 left-0 h-[calc(100vh-48px)] bg-white border-r flex flex-col z-[70] shadow-xl lg:shadow-none transition-all duration-300 ease-in-out
+        ${isOpen ? 'w-72 translate-x-0' : 'w-0 -translate-x-full lg:translate-x-0 lg:border-none lg:overflow-hidden'}
       `}>
-        <div className="p-4 border-b flex items-center justify-between shrink-0">
+        <div className={`p-4 border-b flex items-center justify-between shrink-0 transition-opacity duration-200 ${isOpen ? 'opacity-100' : 'opacity-0'}`}>
           <h2 className="font-bold text-gray-800 flex items-center truncate">
             <Filter size={18} className="mr-2 text-blue-600 flex-shrink-0" />
             Report Filters
           </h2>
-          <button className="lg:hidden p-1 text-gray-400 hover:text-gray-600" onClick={onCloseMobile}>
+          <button className="lg:hidden p-1 text-gray-400 hover:text-gray-600 transition-colors" onClick={onCloseMobile}>
             <X size={20} />
           </button>
         </div>
 
-        <div className="flex-grow overflow-y-auto custom-scrollbar">
+        <div className={`flex-grow overflow-y-auto custom-scrollbar transition-opacity duration-200 ${isOpen ? 'opacity-100' : 'opacity-0'}`}>
           <FilterSection 
             title="Job title" 
             icon={<Briefcase size={18} />}
@@ -120,7 +119,7 @@ export const Sidebar: React.FC<SidebarProps> = ({ filters, onUpdateFilters, onAp
               {filters.jobTitles.map((label, idx) => (
                 <FilterChip key={idx} label={label} onRemove={() => handleRemove('jobTitles', idx)} />
               ))}
-              <button onClick={() => handleAddPrompt('jobTitles')} className="text-gray-400 hover:text-blue-600 p-1 border border-dashed border-gray-200 rounded mb-2 hover:border-blue-300 transition-colors">
+              <button onClick={() => handleAddPrompt('jobTitles')} className="text-gray-400 hover:text-blue-600 p-1 border border-dashed border-gray-200 rounded mb-2 hover:border-blue-300 transition-all active:scale-90">
                 <Plus size={14} />
               </button>
             </div>
@@ -137,7 +136,7 @@ export const Sidebar: React.FC<SidebarProps> = ({ filters, onUpdateFilters, onAp
               {filters.locations.map((label, idx) => (
                 <FilterChip key={idx} label={label} onRemove={() => handleRemove('locations', idx)} />
               ))}
-              <button onClick={() => handleAddPrompt('locations')} className="text-gray-400 hover:text-blue-600 p-1 border border-dashed border-gray-200 rounded mb-2 hover:border-blue-300 transition-colors">
+              <button onClick={() => handleAddPrompt('locations')} className="text-gray-400 hover:text-blue-600 p-1 border border-dashed border-gray-200 rounded mb-2 hover:border-blue-300 transition-all active:scale-90">
                 <Plus size={14} />
               </button>
             </div>
@@ -153,7 +152,7 @@ export const Sidebar: React.FC<SidebarProps> = ({ filters, onUpdateFilters, onAp
               {filters.skills.map((label, idx) => (
                 <FilterChip key={idx} label={label} onRemove={() => handleRemove('skills', idx)} />
               ))}
-              <button onClick={() => handleAddPrompt('skills')} className="text-gray-400 hover:text-blue-600 p-1 border border-dashed border-gray-200 rounded mb-2 hover:border-blue-300 transition-colors">
+              <button onClick={() => handleAddPrompt('skills')} className="text-gray-400 hover:text-blue-600 p-1 border border-dashed border-gray-200 rounded mb-2 hover:border-blue-300 transition-all active:scale-90">
                 <Plus size={14} />
               </button>
             </div>
@@ -165,17 +164,17 @@ export const Sidebar: React.FC<SidebarProps> = ({ filters, onUpdateFilters, onAp
           <FilterSection title="Education" icon={<GraduationCap size={18} />} isOpen={!!openSections['Education']} onToggle={() => toggleSection('Education')} />
         </div>
 
-        <div className="p-4 bg-white border-t sticky bottom-0 flex flex-col items-center shrink-0">
+        <div className={`p-4 bg-white border-t sticky bottom-0 flex flex-col items-center shrink-0 transition-opacity duration-200 ${isOpen ? 'opacity-100' : 'opacity-0'}`}>
           <button 
             onClick={() => {
               onApply();
               if (window.innerWidth < 1024) onCloseMobile();
             }}
-            className="w-full bg-[#0a66c2] text-white font-semibold py-2 rounded-full hover:bg-[#004182] transition-all shadow-sm active:scale-[0.98]"
+            className="w-full bg-[#0a66c2] text-white font-bold py-2 rounded-full hover:bg-[#004182] transition-all shadow-md active:scale-95 flex items-center justify-center"
           >
             Apply filters
           </button>
-          <p className="text-center text-[10px] text-gray-500 mt-2 font-medium tracking-wide">Dynamic Talent Pool Report</p>
+          <p className="text-center text-[10px] text-gray-500 mt-2 font-bold tracking-widest uppercase">Analytical Talent Insights</p>
         </div>
       </aside>
     </>

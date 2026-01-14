@@ -27,8 +27,8 @@ const COLORS = ['#00a3c2', '#0073b1'];
 
 export const EngagementLineChart: React.FC = () => {
   return (
-    <div className="h-64 w-full">
-      <ResponsiveContainer width="100%" height="100%">
+    <div className="h-64 w-full min-w-0 min-h-0 overflow-hidden">
+      <ResponsiveContainer width="100%" height="100%" minWidth={0} minHeight={0}>
         <LineChart data={engagementData} margin={{ top: 20, right: 30, left: 0, bottom: 0 }}>
           <CartesianGrid strokeDasharray="3 3" vertical={false} stroke="#f0f0f0" />
           <XAxis 
@@ -44,7 +44,7 @@ export const EngagementLineChart: React.FC = () => {
             tick={{ fontSize: 10, fill: '#666' }}
             ticks={[0, 1500, 3000, 4500]}
           />
-          <Tooltip />
+          <Tooltip contentStyle={{ fontSize: '12px', borderRadius: '4px', border: '1px solid #eee' }} />
           <Line 
             type="monotone" 
             dataKey="value" 
@@ -61,8 +61,8 @@ export const EngagementLineChart: React.FC = () => {
 
 export const DiversityDonutChart: React.FC = () => {
   return (
-    <div className="h-28 w-28">
-      <ResponsiveContainer width="100%" height="100%">
+    <div className="h-28 w-28 min-w-0 min-h-0 overflow-hidden">
+      <ResponsiveContainer width="100%" height="100%" minWidth={0} minHeight={0}>
         <PieChart>
           <Pie
             data={diversityData}

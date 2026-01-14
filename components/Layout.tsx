@@ -1,6 +1,6 @@
 
 import React from 'react';
-import { HelpCircle, User, LayoutGrid, ChevronDown, Bookmark, Share2, Download, Menu } from 'lucide-react';
+import { HelpCircle, User, LayoutGrid, ChevronDown, Bookmark, Share2, Download, Menu, PanelLeftClose, PanelLeft } from 'lucide-react';
 
 interface LayoutProps {
   onAction: (msg: string) => void;
@@ -45,18 +45,20 @@ export const TopNav: React.FC<LayoutProps> = ({ onAction }) => {
 };
 
 interface HeaderProps extends LayoutProps {
-  onToggleSidebar?: () => void;
+  onToggleSidebar: () => void;
+  isSidebarOpen: boolean;
 }
 
-export const DashboardHeader: React.FC<HeaderProps> = ({ onToggleSidebar, onAction }) => {
+export const DashboardHeader: React.FC<HeaderProps> = ({ onToggleSidebar, isSidebarOpen, onAction }) => {
   return (
     <div className="bg-white border-b px-4 md:px-6 py-4 flex flex-col md:flex-row md:items-center justify-between gap-4">
-      <div className="flex items-start space-x-4">
+      <div className="flex items-center space-x-4">
         <button 
           onClick={onToggleSidebar}
-          className="lg:hidden p-2 -ml-2 text-gray-500 hover:bg-gray-100 rounded"
+          className="p-2 -ml-2 text-gray-500 hover:bg-gray-100 rounded transition-colors"
+          title={isSidebarOpen ? "Hide Sidebar" : "Show Sidebar"}
         >
-          <Menu size={24} />
+          {isSidebarOpen ? <PanelLeftClose size={24} /> : <PanelLeft size={24} />}
         </button>
         <div className="bg-blue-50 p-3 rounded-md hidden sm:block">
           <LayoutGrid className="text-blue-600" size={28} />

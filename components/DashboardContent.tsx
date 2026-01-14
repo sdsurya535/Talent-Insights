@@ -1,7 +1,7 @@
 
 import React from 'react';
-import { EngagementLineChart } from './Charts';
-import { HelpCircle, TrendingUp, Loader2 } from 'lucide-react';
+import { EngagementLineChart, DiversityDonutChart } from './Charts';
+import { HelpCircle, TrendingUp, Loader2, MapPin, Building2, Users, Briefcase, GraduationCap, BarChart3, Star, Search, Filter } from 'lucide-react';
 
 const MetricCard: React.FC<{ label: string; value: string; change?: string; changeType?: 'pos' | 'neg' }> = ({ label, value, change, changeType }) => (
   <div className="flex flex-col">
@@ -18,14 +18,229 @@ const MetricCard: React.FC<{ label: string; value: string; change?: string; chan
   </div>
 );
 
+// --- Sub-page Components ---
+
+const OverviewPage: React.FC<{ onAction: (msg: string) => void }> = ({ onAction }) => (
+  <div className="animate-in fade-in duration-500">
+    <div className="grid grid-cols-2 lg:grid-cols-4 gap-6 md:gap-8 mb-12 border-b pb-10">
+      <MetricCard label="Professionals" value="885,533" change="3.2%" changeType="pos" />
+      <MetricCard label="Changed jobs" value="112,402" />
+      <MetricCard label="Job posts" value="15,201" />
+      <MetricCard label="Engaged talent" value="38,414" />
+    </div>
+
+    <section className="mb-14">
+      <div className="flex items-center justify-between mb-6">
+        <h2 className="text-xl font-bold text-gray-800">Talent Distribution</h2>
+        <button onClick={() => onAction("Viewing full location report")} className="text-sm font-bold text-blue-600 hover:underline">See all</button>
+      </div>
+      <div className="flex flex-col xl:flex-row gap-8">
+        <div className="flex-grow bg-gray-50 rounded-xl border min-h-[300px] relative overflow-hidden">
+          <img src="https://picsum.photos/seed/map/800/400" className="w-full h-full object-cover opacity-30" alt="map" />
+          <div className="absolute inset-0 flex items-center justify-center pointer-events-none">
+            <div className="bg-white/80 px-4 py-2 rounded shadow-sm text-xs font-bold text-gray-500 uppercase">Map Visualization</div>
+          </div>
+        </div>
+        <div className="w-full xl:w-80 flex-shrink-0">
+          <ul className="space-y-4 divide-y">
+            {[
+              { name: 'New York Area', count: '162,000' },
+              { name: 'Atlanta Metro', count: '52,300' },
+              { name: 'Dallas Metro', count: '47,100' },
+              { name: 'Charlotte Metro', count: '27,800' }
+            ].map((loc, i) => (
+              <li key={loc.name} className="flex justify-between text-sm pt-3 first:pt-0">
+                <span className="text-gray-700">{loc.name}</span>
+                <span className="text-gray-900 font-bold tabular-nums">{loc.count}</span>
+              </li>
+            ))}
+          </ul>
+        </div>
+      </div>
+    </section>
+  </div>
+);
+
+const LocationPage: React.FC = () => (
+  <div className="animate-in fade-in duration-500">
+    <h2 className="text-2xl font-bold mb-6">Talent Locations</h2>
+    <div className="grid grid-cols-1 md:grid-cols-2 gap-8 mb-10">
+      <div className="border rounded-xl p-6 bg-white shadow-sm">
+        <h3 className="font-bold mb-4 text-gray-500 uppercase text-xs tracking-widest">Global Reach</h3>
+        <div className="h-64 bg-blue-50 rounded-lg flex items-center justify-center text-blue-300 italic">Detailed Heatmap</div>
+      </div>
+      <div className="border rounded-xl p-6 bg-white shadow-sm">
+        <h3 className="font-bold mb-4 text-gray-500 uppercase text-xs tracking-widest">Growth Markets</h3>
+        <div className="space-y-4">
+           {[
+             { name: 'Austin, TX', growth: '+12%', count: '14,200' },
+             { name: 'Denver, CO', growth: '+8%', count: '11,100' },
+             { name: 'Seattle, WA', growth: '+5%', count: '22,400' },
+             { name: 'Salt Lake City, UT', growth: '+15%', count: '6,200' },
+           ].map(l => (
+             <div key={l.name} className="flex items-center justify-between border-b pb-2">
+               <div>
+                 <p className="font-semibold">{l.name}</p>
+                 <p className="text-xs text-gray-400">Emerging Talent Hub</p>
+               </div>
+               <div className="text-right">
+                 <p className="font-bold text-blue-600">{l.count}</p>
+                 <p className="text-xs text-green-600">{l.growth}</p>
+               </div>
+             </div>
+           ))}
+        </div>
+      </div>
+    </div>
+  </div>
+);
+
+const CompanyPage: React.FC = () => (
+  <div className="animate-in fade-in duration-500">
+    <h2 className="text-2xl font-bold mb-6">Employer Insights</h2>
+    <div className="bg-white border rounded-xl shadow-sm overflow-hidden">
+      <table className="w-full text-left">
+        <thead className="bg-gray-50 text-[10px] font-bold uppercase text-gray-500">
+          <tr>
+            <th className="px-6 py-4">Current Employer</th>
+            <th className="px-6 py-4">Professionals</th>
+            <th className="px-6 py-4">Market Share</th>
+            <th className="px-6 py-4">Avg. Tenure</th>
+          </tr>
+        </thead>
+        <tbody className="divide-y">
+          {[
+            { name: 'Google', count: '14,281', share: '4.2%', tenure: '3.2 years' },
+            { name: 'Meta', count: '9,408', share: '2.8%', tenure: '2.8 years' },
+            { name: 'Microsoft', count: '8,406', share: '2.5%', tenure: '4.1 years' },
+            { name: 'Amazon', count: '7,350', share: '2.2%', tenure: '1.9 years' },
+            { name: 'Apple', count: '6,297', share: '1.9%', tenure: '3.5 years' },
+          ].map(c => (
+            <tr key={c.name} className="hover:bg-gray-50">
+              <td className="px-6 py-4 font-bold text-blue-600">{c.name}</td>
+              <td className="px-6 py-4">{c.count}</td>
+              <td className="px-6 py-4">{c.share}</td>
+              <td className="px-6 py-4">{c.tenure}</td>
+            </tr>
+          ))}
+        </tbody>
+      </table>
+    </div>
+  </div>
+);
+
+const TitlesPage: React.FC = () => (
+  <div className="animate-in fade-in duration-500">
+    <h2 className="text-2xl font-bold mb-6">Job Titles & Roles</h2>
+    <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
+      <div className="p-6 border rounded-xl bg-white shadow-sm">
+        <h3 className="text-xs font-bold text-gray-500 uppercase mb-4">Top Seniority Levels</h3>
+        <div className="space-y-3">
+          {[
+            { level: 'Senior', pct: 45 },
+            { level: 'Lead / Principal', pct: 22 },
+            { level: 'Manager', pct: 18 },
+            { level: 'Director+', pct: 8 },
+            { level: 'Entry', pct: 7 },
+          ].map(s => (
+            <div key={s.level} className="space-y-1">
+              <div className="flex justify-between text-xs">
+                <span>{s.level}</span>
+                <span>{s.pct}%</span>
+              </div>
+              <div className="h-2 bg-gray-100 rounded-full overflow-hidden">
+                <div className="h-full bg-blue-600" style={{ width: `${s.pct}%` }}></div>
+              </div>
+            </div>
+          ))}
+        </div>
+      </div>
+      <div className="p-6 border rounded-xl bg-white shadow-sm">
+        <h3 className="text-xs font-bold text-gray-500 uppercase mb-4">Most Frequent Titles</h3>
+        <div className="flex flex-wrap gap-2">
+           {['Software Engineer', 'Senior Software Engineer', 'Full Stack Developer', 'Frontend Architect', 'Engineering Manager', 'Cloud Architect', 'Systems Lead', 'DevOps Engineer'].map(t => (
+             <span key={t} className="px-3 py-1 bg-blue-50 text-blue-700 rounded-full text-sm border border-blue-100">{t}</span>
+           ))}
+        </div>
+      </div>
+    </div>
+  </div>
+);
+
+const SkillsPage: React.FC = () => (
+  <div className="animate-in fade-in duration-500">
+    <h2 className="text-2xl font-bold mb-6">Skill Analysis</h2>
+    <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+      {['Programming Languages', 'Web Technologies', 'Cloud Platforms'].map(cat => (
+        <div key={cat} className="p-6 border rounded-xl bg-white shadow-sm">
+          <h3 className="font-bold text-sm mb-4">{cat}</h3>
+          <ul className="space-y-3">
+            {[1, 2, 3, 4, 5].map(i => (
+              <li key={i} className="flex justify-between text-sm">
+                <span className="text-gray-600">Sample Skill {i}</span>
+                <span className="text-blue-600 font-bold">88%</span>
+              </li>
+            ))}
+          </ul>
+        </div>
+      ))}
+    </div>
+  </div>
+);
+
+const ProfilesPage: React.FC = () => (
+  <div className="animate-in fade-in duration-500">
+    <h2 className="text-2xl font-bold mb-6">Talent Profiles</h2>
+    <div className="space-y-4">
+      {[1, 2, 3, 4, 5].map(i => (
+        <div key={i} className="flex items-center p-4 border rounded-xl bg-white hover:shadow-md transition-shadow">
+          <div className="w-16 h-16 bg-gray-200 rounded-full mr-4 flex-shrink-0 overflow-hidden">
+            <img src={`https://picsum.photos/seed/${i + 50}/100/100`} alt="profile" />
+          </div>
+          <div className="flex-grow min-w-0">
+            <h4 className="font-bold text-blue-600 hover:underline cursor-pointer truncate">Candidate Name {i}</h4>
+            <p className="text-sm text-gray-800 font-medium">Senior Software Engineer at Major Tech Corp</p>
+            <p className="text-xs text-gray-500">Greater New York City Area • 500+ connections</p>
+          </div>
+          <button className="ml-4 px-4 py-1.5 border border-blue-600 text-blue-600 rounded-full font-bold text-sm hover:bg-blue-50">View</button>
+        </div>
+      ))}
+    </div>
+  </div>
+);
+
+const EmptyState: React.FC<{ title: string }> = ({ title }) => (
+  <div className="h-64 flex flex-col items-center justify-center border-2 border-dashed rounded-xl bg-gray-50 animate-in fade-in duration-500">
+    <BarChart3 className="text-gray-300 mb-2" size={48} />
+    <h3 className="text-lg font-bold text-gray-400">{title} Data Coming Soon</h3>
+    <p className="text-sm text-gray-400">Refining insights for this talent pool...</p>
+  </div>
+);
+
 interface DashboardContentProps {
   isLoading?: boolean;
+  activeTab: string;
   onAction: (msg: string) => void;
 }
 
-export const DashboardContent: React.FC<DashboardContentProps> = ({ isLoading, onAction }) => {
+export const DashboardContent: React.FC<DashboardContentProps> = ({ isLoading, activeTab, onAction }) => {
+  const renderContent = () => {
+    switch (activeTab) {
+      case 'Overview': return <OverviewPage onAction={onAction} />;
+      case 'Location': return <LocationPage />;
+      case 'Company': return <CompanyPage />;
+      case 'Titles': return <TitlesPage />;
+      case 'Skills': return <SkillsPage />;
+      case 'Profiles': return <ProfilesPage />;
+      case 'Industry': return <EmptyState title="Industry" />;
+      case 'Education': return <EmptyState title="Education" />;
+      case 'Employer brand': return <EmptyState title="Employer Brand" />;
+      default: return <OverviewPage onAction={onAction} />;
+    }
+  };
+
   return (
-    <div className="p-4 md:p-6 lg:p-8 relative max-w-full">
+    <div className="p-4 md:p-6 lg:p-8 relative max-w-full min-h-screen">
       {isLoading && (
         <div className="absolute inset-0 bg-white/75 z-30 flex items-center justify-center backdrop-blur-[2px] transition-all duration-300">
           <div className="flex flex-col items-center bg-white p-8 rounded-xl shadow-2xl border border-gray-100">
@@ -35,135 +250,7 @@ export const DashboardContent: React.FC<DashboardContentProps> = ({ isLoading, o
         </div>
       )}
 
-      <div className="grid grid-cols-2 lg:grid-cols-4 gap-6 md:gap-8 mb-12 border-b pb-10">
-        <MetricCard label="Professionals" value="885,533" change="3.2%" changeType="pos" />
-        <MetricCard label="Changed jobs" value="112,402" />
-        <MetricCard label="Job posts" value="15,201" />
-        <MetricCard label="Engaged talent" value="38,414" />
-      </div>
-
-      {/* Location Section */}
-      <section className="mb-14">
-        <div className="flex items-center justify-between mb-6">
-          <h2 className="text-xl font-bold text-gray-800">Where is this talent located?</h2>
-          <button onClick={() => onAction("Viewing full location report")} className="text-sm font-bold text-blue-600 hover:underline px-3 py-1 hover:bg-blue-50 rounded-md transition-all">See all locations</button>
-        </div>
-        <div className="flex flex-col xl:flex-row gap-8">
-          <div className="flex-grow bg-gray-50 rounded-xl border flex items-center justify-center min-h-[350px] relative shadow-inner overflow-hidden ring-1 ring-gray-200">
-            <img src="https://picsum.photos/seed/map-pro/1000/500" alt="Map" className="w-full h-full object-cover opacity-30 grayscale contrast-125" />
-            <div className="absolute inset-0 flex items-center justify-center pointer-events-none">
-              <div className="bg-white/90 px-4 py-2 rounded-full shadow-lg border text-gray-500 font-bold text-xs uppercase tracking-widest flex items-center">
-                Interactive Distribution View
-              </div>
-            </div>
-            <div className="absolute bottom-6 left-6 flex flex-col space-y-2">
-              <button 
-                onClick={() => onAction("Zoomed In")}
-                className="bg-white border-2 border-gray-100 rounded-lg shadow-md w-10 h-10 flex items-center justify-center text-gray-700 hover:bg-gray-50 font-bold active:bg-gray-200 transition-all"
-              >
-                +
-              </button>
-              <button 
-                onClick={() => onAction("Zoomed Out")}
-                className="bg-white border-2 border-gray-100 rounded-lg shadow-md w-10 h-10 flex items-center justify-center text-gray-700 hover:bg-gray-50 font-bold active:bg-gray-200 transition-all"
-              >
-                -
-              </button>
-            </div>
-          </div>
-          <div className="w-full xl:w-80 flex-shrink-0">
-            <div className="flex justify-between text-[11px] text-gray-400 mb-3 font-bold uppercase tracking-wider">
-              <span>Top locations</span>
-              <span>Professionals</span>
-            </div>
-            <ul className="space-y-4 divide-y divide-gray-100">
-              {[
-                { name: 'New York City Metropolitan Area', count: '162,000' },
-                { name: 'Atlanta Metropolitan Area', count: '52,300' },
-                { name: 'Dallas Fort Worth Metroplex', count: '47,100' },
-                { name: 'Charlotte Metro', count: '27,800' },
-                { name: 'Albany, NY Metro Area', count: '17,200' }
-              ].map((loc, i) => (
-                <li key={i} className="flex justify-between text-sm pt-3 first:pt-0 group">
-                  <span onClick={() => onAction(`Filtering report for ${loc.name}`)} className="text-gray-700 truncate mr-4 cursor-pointer hover:text-blue-600 font-medium group-hover:underline transition-all">{loc.name}</span>
-                  <span className="text-gray-900 font-bold flex-shrink-0 tabular-nums">{loc.count}</span>
-                </li>
-              ))}
-            </ul>
-          </div>
-        </div>
-      </section>
-
-      {/* Employing Section */}
-      <section className="mb-14">
-        <div className="flex items-center justify-between mb-6">
-          <h2 className="text-xl font-bold text-gray-800">Who is employing this talent?</h2>
-          <button onClick={() => onAction("Viewing full company report")} className="text-sm font-bold text-blue-600 hover:underline px-3 py-1 hover:bg-blue-50 rounded-md transition-all">See all companies</button>
-        </div>
-        <div className="overflow-x-auto rounded-xl border border-gray-200 shadow-lg bg-white custom-scrollbar">
-          <table className="w-full text-sm min-w-[700px] table-fixed">
-            <thead className="text-[11px] text-gray-500 font-bold border-b text-left bg-gray-50">
-              <tr>
-                <th className="py-4 px-6 uppercase tracking-widest w-[40%]">Top companies</th>
-                <th className="py-4 px-6 uppercase tracking-widest text-right w-[20%]">Professionals</th>
-                <th className="py-4 px-6 uppercase tracking-widest text-right w-[20%]">1y growth</th>
-                <th className="py-4 px-6 uppercase tracking-widest text-right w-[20%]">Job posts</th>
-              </tr>
-            </thead>
-            <tbody className="divide-y divide-gray-100">
-              {[
-                { name: 'Google', count: '14,281', growth: '5%', growthType: 'pos', posts: 142 },
-                { name: 'Meta', count: '9,408', growth: '2%', growthType: 'pos', posts: 84 },
-                { name: 'Microsoft', count: '8,406', growth: '0%', growthType: 'neu', posts: 211 },
-                { name: 'Amazon', count: '7,350', growth: '1%', growthType: 'neg', posts: 350 },
-                { name: 'Apple', count: '6,297', growth: '3%', growthType: 'pos', posts: 92 },
-              ].map((comp, i) => (
-                <tr key={i} className="hover:bg-blue-50/40 group transition-all duration-150">
-                  <td className="py-4 px-6 flex items-center space-x-4 overflow-hidden">
-                    <div className="w-10 h-10 bg-white rounded-lg border-2 border-gray-100 flex items-center justify-center font-bold text-blue-600 text-sm flex-shrink-0 shadow-sm group-hover:border-blue-200 transition-colors">{comp.name[0]}</div>
-                    <span onClick={() => onAction(`Opening company details for ${comp.name}`)} className="font-bold text-blue-600 hover:underline cursor-pointer truncate text-base">{comp.name}</span>
-                  </td>
-                  <td className="py-4 px-6 text-right text-gray-700 font-bold tabular-nums">{comp.count}</td>
-                  <td className={`py-4 px-6 text-right font-bold whitespace-nowrap tabular-nums ${comp.growthType === 'pos' ? 'text-green-600' : comp.growthType === 'neg' ? 'text-red-600' : 'text-gray-500'}`}>
-                    {comp.growthType === 'pos' ? '▲ ' : comp.growthType === 'neg' ? '▼ ' : ''}{comp.growth}
-                  </td>
-                  <td onClick={() => onAction(`Viewing job posts for ${comp.name}`)} className="py-4 px-6 text-right text-gray-700 hover:text-blue-600 font-bold cursor-pointer hover:underline tabular-nums">{comp.posts}</td>
-                </tr>
-              ))}
-            </tbody>
-          </table>
-        </div>
-      </section>
-
-      {/* Engagement Section */}
-      <section className="pb-12">
-        <div className="flex items-center justify-between mb-6">
-          <div className="flex items-center space-x-3">
-            <h2 className="text-xl font-bold text-gray-800">Employer brand engagement</h2>
-            <HelpCircle size={16} className="text-gray-400 cursor-pointer hover:text-blue-600 transition-colors" onClick={() => onAction("Engagement metric help")} />
-          </div>
-          <button onClick={() => onAction("Viewing brand analytics details")} className="text-sm font-bold text-blue-600 hover:underline px-3 py-1 hover:bg-blue-50 rounded-md transition-all">See brand insights</button>
-        </div>
-        <div className="flex flex-col lg:flex-row items-stretch gap-10 bg-white p-8 border border-gray-200 rounded-xl shadow-xl hover:shadow-2xl transition-shadow duration-300">
-          <div className="flex-grow w-full min-h-[300px] cursor-crosshair">
-            <EngagementLineChart />
-          </div>
-          <div className="w-full lg:w-80 pt-6 flex flex-col justify-center border-t lg:border-t-0 lg:border-l lg:pl-10">
-            <div className="text-4xl font-light text-gray-900 tracking-tight">38,414 <span className="text-base text-gray-500 font-normal ml-1"> (14%)</span></div>
-            <p className="text-xs text-gray-500 mt-2 mb-8 leading-relaxed font-medium">Talent in this pool who engaged with your employer brand on LinkedIn over the past year.</p>
-            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-              <div className="bg-gray-50 p-4 rounded-xl border border-gray-100 cursor-pointer hover:bg-blue-50 hover:border-blue-100 transition-all group" onClick={() => onAction("Opening Job Conversion detailed view")}>
-                <div className="text-2xl font-bold text-gray-800 group-hover:text-blue-700 transition-colors">32%</div>
-                <div className="text-[10px] text-gray-400 uppercase font-bold tracking-widest mt-1">Job conversion</div>
-              </div>
-              <div className="bg-gray-50 p-4 rounded-xl border border-gray-100 cursor-pointer hover:bg-blue-50 hover:border-blue-100 transition-all group" onClick={() => onAction("Opening InMail Response detailed view")}>
-                <div className="text-2xl font-bold text-gray-800 group-hover:text-blue-700 transition-colors">18.5%</div>
-                <div className="text-[10px] text-gray-400 uppercase font-bold tracking-widest mt-1">InMail response</div>
-              </div>
-            </div>
-          </div>
-        </div>
-      </section>
+      {renderContent()}
     </div>
   );
 };
